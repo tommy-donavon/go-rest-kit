@@ -6,9 +6,9 @@ import (
 )
 
 type (
-	contextHandler struct{}
+	ContextHandler struct{}
 
-	contextValues struct {
+	ContextValues struct {
 		values map[string]interface{}
 	}
 
@@ -19,8 +19,8 @@ const (
 	ck contextKey = "contextKey"
 )
 
-func (c *contextHandler) get(ctx context.Context, key string) (interface{}, error) {
-	ctxMap, ok := ctx.Value(ck).(contextValues)
+func (c *ContextHandler) Get(ctx context.Context, key string) (interface{}, error) {
+	ctxMap, ok := ctx.Value(ck).(ContextValues)
 	if !ok {
 		return nil, fmt.Errorf("unable to retrieve request context")
 	}
@@ -30,11 +30,11 @@ func (c *contextHandler) get(ctx context.Context, key string) (interface{}, erro
 	return nil, fmt.Errorf("error retrieving item at key %s", key)
 }
 
-func (c *contextHandler) add(ctx context.Context, key string, value interface{}) context.Context {
+func (c *ContextHandler) Add(ctx context.Context, key string, value interface{}) context.Context {
 
-	ctxMap, ok := ctx.Value(ck).(contextValues)
+	ctxMap, ok := ctx.Value(ck).(ContextValues)
 	if !ok {
-		ctxMap = contextValues{
+		ctxMap = ContextValues{
 			values: make(map[string]interface{}),
 		}
 	}
