@@ -10,34 +10,34 @@ import (
 )
 
 type RequestOptions struct {
-	serviceName string
-	methodType  string
-	endpoint    string
-	register    *consul_register.ConsulClient
-	body        []byte
-	headers     map[string]string
+	ServiceName string
+	MethodType  string
+	Endpoint    string
+	Register    *consul_register.ConsulClient
+	Body        []byte
+	Headers     map[string]string
 }
 
 //send new http request
 func SendNewRequest(reqOptions *RequestOptions) (*http.Response, error) {
-	if reqOptions.register == nil {
+	if reqOptions.Register == nil {
 		return nil, fmt.Errorf("can not look up service with nil consul client")
 	}
-	ser, err := reqOptions.register.LookUpService(reqOptions.serviceName)
+	ser, err := reqOptions.Register.LookUpService(reqOptions.ServiceName)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest(reqOptions.methodType, ser.GetHTTP()+reqOptions.endpoint, nil)
+	req, err := http.NewRequest(reqOptions.MethodType, ser.GetHTTP()+reqOptions.Endpoint, nil)
 	if err != nil {
 		return nil, err
 	}
-	if reqOptions.body != nil {
+	if reqOptions.Body != nil {
 
-		req.Body = ioutil.NopCloser(strings.NewReader(string(reqOptions.body)))
+		req.Body = ioutil.NopCloser(strings.NewReader(string(reqOptions.Body)))
 	}
 
-	for key, value := range reqOptions.headers {
+	for key, value := range reqOptions.Headers {
 		req.Header.Set(key, value)
 	}
 	client := &http.Client{}
