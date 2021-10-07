@@ -1,4 +1,4 @@
-package kit_utils
+package consul_register
 
 import (
 	"fmt"
